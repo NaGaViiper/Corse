@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corse du Sud — Programme de vacances · Horizons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d0d0f;--surface:#141418;--panel:#1e1e26;
+  --border:rgba(255,255,255,0.10);--border2:rgba(255,255,255,0.16);
+  --text:#e8e6e0;--muted:rgba(232,230,224,0.62);
+  --accent:#c8a96e;--accent2:#e2c48a;--accent-dim:rgba(200,169,110,0.15);
+  --green:#6db88a;--blue:#6b9fd4;--purple:#9b7fd4;--red:#d4756b;--orange:#e8914a;
+  --radius:16px;--radius-sm:10px;--shadow:rgba(0,0,0,0.4);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:75%;scrollbar-width:thin;scrollbar-color:rgba(200,169,110,.28) transparent}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--text);overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(200,169,110,.28);border-radius:100px}
+::-webkit-scrollbar-thumb:hover{background:rgba(200,169,110,.52)}
+
+/* ═══ ORBS BG ═══ */
+.orbs{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.065;will-change:transform}
+.o1{width:700px;height:700px;background:radial-gradient(#c8a96e,transparent);top:-250px;left:-150px;animation:d1 22s ease-in-out infinite}
+.o2{width:500px;height:500px;background:radial-gradient(#6b9fd4,transparent);bottom:-100px;right:-100px;animation:d2 18s ease-in-out infinite}
+.o3{width:350px;height:350px;background:radial-gradient(#6db88a,transparent);top:40%;left:50%;animation:d3 25s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+@keyframes d2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-30px)}}
+@keyframes d3{0%,100%{transform:translate(0,0)}50%{transform:translate(35px,-45px)}}
+
+/* ═══ LAYOUT ═══ */
+.page-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem}
+.content-grid{display:grid;grid-template-columns:1fr 290px;gap:2.2rem;align-items:start}
+@media(max-width:860px){.content-grid{grid-template-columns:1fr}}
+
+/* ═══ HERO HEADER ═══ */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#0d0d12 0%,#1a1626 55%,#100f1a 100%);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  padding:2.8rem 2.2rem 2.2rem;margin-bottom:2.4rem;
+}
+.hero::before{
+  content:'🏔️';position:absolute;right:2rem;top:50%;transform:translateY(-50%);
+  font-size:7rem;opacity:.05;line-height:1;pointer-events:none;
+}
+.hero-sup{
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(200,169,110,.55);margin-bottom:.8rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.hero-sup::before{content:'';display:inline-block;width:20px;height:1px;background:rgba(200,169,110,.4)}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,5vw,3.8rem);font-weight:700;
+  color:var(--text);line-height:1;margin-bottom:.4rem;letter-spacing:-.02em;
+}
+.hero-title em{font-style:italic;color:var(--accent)}
+.hero-sub{
+  font-size:.85rem;color:var(--muted);font-weight:300;margin-bottom:1.4rem;
+}
+.hero-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.28rem .75rem;border-radius:100px;
+  font-size:.65rem;font-weight:600;border:1px solid transparent;
+}
+.pill-gold{background:rgba(200,169,110,.12);color:var(--accent2);border-color:rgba(200,169,110,.28)}
+.pill-green{background:rgba(109,184,138,.12);color:var(--green);border-color:rgba(109,184,138,.28)}
+.pill-blue{background:rgba(107,159,212,.12);color:var(--blue);border-color:rgba(107,159,212,.28)}
+.pill-red{background:rgba(212,117,107,.12);color:var(--red);border-color:rgba(212,117,107,.28)}
+.pill-purple{background:rgba(155,127,212,.12);color:var(--purple);border-color:rgba(155,127,212,.28)}
+
+/* ═══ WEATHER BANNER ═══ */
+.weather-section{margin-bottom:2rem}
+.section-head{
+  display:flex;align-items:center;gap:.55rem;margin-bottom:1rem;
+  font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(200,169,110,.55);
+}
+.section-head::before{content:'';display:inline-block;width:3px;height:14px;background:var(--accent);border-radius:2px;flex-shrink:0}
+
+.weather-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+@media(max-width:600px){.weather-grid{grid-template-columns:repeat(2,1fr)}}
+.w-card{
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:.8rem .75rem;
+  transition:border-color .2s,background .2s;
+}
+.w-card:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.055)}
+.w-day{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.w-ico{font-size:1.5rem;line-height:1;margin-bottom:.3rem}
+.w-temps{font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;color:var(--text)}
+.w-temps span{color:var(--muted);font-weight:400;font-size:.75rem}
+.w-note{font-size:.62rem;color:var(--muted);margin-top:.3rem;line-height:1.45}
+.w-alert{color:var(--orange);font-size:.6rem;font-weight:600;margin-top:.3rem;display:flex;align-items:flex-start;gap:.25rem}
+.w-banner{
+  margin-top:.8rem;padding:.65rem 1rem;
+  background:rgba(107,159,212,.06);border:1px solid rgba(107,159,212,.18);border-radius:10px;
+  font-size:.68rem;color:rgba(107,159,212,.85);line-height:1.55;
+}
+.w-banner strong{color:var(--blue);font-weight:600}
+
+/* ═══ TIMELINE ═══ */
+.days-col{}
+.day-block{margin-bottom:1.4rem}
+.day-header{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.75rem 1.1rem;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px 12px 0 0;cursor:pointer;
+  transition:background .2s,border-color .2s;
+  user-select:none;
+}
+.day-header:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+.day-header.open{background:rgba(200,169,110,.04);border-color:rgba(200,169,110,.2);border-radius:12px 12px 0 0}
+.day-header.closed{border-radius:12px}
+.day-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.7rem;font-weight:700;color:var(--accent);line-height:1;
+  flex-shrink:0;width:2rem;text-align:center;
+}
+.day-date-info{flex:1}
+.day-date{
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);
+}
+.day-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;font-weight:600;color:var(--text);line-height:1.2;
+}
+.day-weather-pill{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.22rem .6rem;border-radius:100px;
+  font-size:.62rem;font-weight:600;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  color:var(--muted);flex-shrink:0;white-space:nowrap;
+}
+.day-chevron{
+  color:var(--muted);font-size:.7rem;flex-shrink:0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.day-header.open .day-chevron{transform:rotate(90deg);color:var(--accent)}
+
+/* Timeline body */
+.day-body{
+  display:none;
+  border:1px solid rgba(200,169,110,.15);border-top:none;
+  border-radius:0 0 12px 12px;
+  background:rgba(255,255,255,.015);
+  padding:1rem 1rem 1.2rem;
+}
+.day-body.open{display:block}
+.day-weather-note{
+  font-size:.7rem;color:var(--muted);margin-bottom:.9rem;
+  padding:.5rem .75rem;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);border-radius:8px;
+  line-height:1.55;
+}
+.day-weather-note strong{color:var(--text);font-weight:600}
+.w-warn{color:var(--orange)}
+
+/* sd-timeline adapted */
+.sd-timeline{display:flex;flex-direction:column;gap:0}
+.sd-slot{display:flex;align-items:stretch;gap:0;position:relative}
+.sd-slot:not(:last-child) .sd-connector{background:rgba(255,255,255,.08)}
+.sd-time-col{width:70px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0;padding-top:5px}
+.sd-time{font-family:'Outfit',sans-serif;font-size:.58rem;font-weight:700;color:var(--muted);letter-spacing:.04em;white-space:nowrap;text-align:center}
+.sd-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin:.3rem 0 0}
+.sd-connector{width:2px;flex:1;margin:0 auto;min-height:20px}
+.sd-card{
+  flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;padding:.75rem .95rem;margin-bottom:8px;
+  transition:background .2s,border-color .2s;
+}
+.sd-card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.sd-card-head{display:flex;align-items:flex-start;gap:.55rem;margin-bottom:.25rem}
+.sd-card-ico{font-size:1.15rem;flex-shrink:0;line-height:1;margin-top:.05rem}
+.sd-card-meta{flex:1}
+.sd-card-type{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.15rem;opacity:.8}
+.sd-card-name{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;color:var(--text);line-height:1.3}
+.sd-card-desc{font-size:.7rem;color:var(--muted);line-height:1.55;margin-top:.2rem}
+.sd-card-footer{display:flex;align-items:center;gap:.4rem;margin-top:.45rem;flex-wrap:wrap}
+.sd-chip{
+  display:inline-flex;align-items:center;gap:.2rem;
+  padding:.16rem .5rem;border-radius:100px;
+  font-size:.59rem;font-weight:600;border:1px solid transparent;
+}
+.sd-chip.green{background:rgba(109,184,138,.12);color:#6db88a;border-color:rgba(109,184,138,.25)}
+.sd-chip.gold{background:rgba(200,169,110,.12);color:#c8a96e;border-color:rgba(200,169,110,.25)}
+.sd-chip.purple{background:rgba(155,127,212,.12);color:#9b7fd4;border-color:rgba(155,127,212,.25)}
+.sd-chip.blue{background:rgba(107,159,212,.12);color:#6b9fd4;border-color:rgba(107,159,212,.25)}
+.sd-chip.red{background:rgba(212,117,107,.12);color:#d4756b;border-color:rgba(212,117,107,.25)}
+.sd-chip.orange{background:rgba(232,145,74,.12);color:#e8914a;border-color:rgba(232,145,74,.25)}
+
+.day-tip{
+  display:flex;gap:.55rem;align-items:flex-start;
+  margin-top:.85rem;padding:.6rem .8rem;
+  background:rgba(200,169,110,.05);border:1px solid rgba(200,169,110,.15);
+  border-left:3px solid rgba(200,169,110,.4);border-radius:0 8px 8px 0;
+  font-size:.68rem;color:var(--muted);line-height:1.55;
+}
+.day-tip strong{color:var(--accent);font-weight:600}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{position:sticky;top:1.5rem;display:flex;flex-direction:column;gap:1.2rem}
+.sbox{
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;overflow:hidden;
+}
+.sbox-head{
+  padding:.7rem 1rem;background:rgba(255,255,255,.02);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:.58rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(200,169,110,.55);display:flex;align-items:center;gap:.45rem;
+}
+.sbox-head::before{content:'';display:inline-block;width:3px;height:12px;background:var(--accent);border-radius:2px}
+.sbox-body{padding:.85rem 1rem}
+.tip-row{
+  display:flex;gap:.55rem;padding:.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.7rem;color:var(--muted);line-height:1.5;
+}
+.tip-row:last-child{border-bottom:none;padding-bottom:0}
+.tip-ico{font-size:.95rem;flex-shrink:0;line-height:1.3}
+.tip-text strong{color:var(--text);font-weight:600;display:block;margin-bottom:.1rem;font-size:.72rem}
+
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.stat-row:last-child{border-bottom:none}
+.stat-label{font-size:.68rem;color:var(--muted)}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--accent);line-height:1}
+
+.rule-item{display:flex;gap:.45rem;align-items:flex-start;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.68rem;color:var(--muted);line-height:1.5}
+.rule-item:last-child{border-bottom:none}
+.rule-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:.42rem}
+.rule-dot.green{background:var(--green)}
+.rule-dot.red{background:var(--red)}
+.rule-dot.orange{background:var(--orange)}
+
+.page-footer{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.8rem 2.2rem 2.2rem;
+  border-top:1px solid rgba(255,255,255,.06);
+  font-size:.65rem;color:rgba(255,255,255,.22);
+  flex-wrap:wrap;gap:.5rem;
+}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--accent);line-height:1}
+
+/* Animations */
+.day-block{opacity:0;transform:translateY(18px);animation:fadeUp .45s forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.day-block:nth-child(1){animation-delay:.05s}.day-block:nth-child(2){animation-delay:.1s}
+.day-block:nth-child(3){animation-delay:.15s}.day-block:nth-child(4){animation-delay:.2s}
+.day-block:nth-child(5){animation-delay:.25s}.day-block:nth-child(6){animation-delay:.3s}
+.day-block:nth-child(7){animation-delay:.35s}.day-block:nth-child(8){animation-delay:.4s}
+.day-block:nth-child(9){animation-delay:.45s}.day-block:nth-child(10){animation-delay:.5s}
+.day-block:nth-child(11){animation-delay:.55s}
+
+.expand-bar{display:flex;align-items:center;justify-content:flex-end;gap:.5rem;margin-bottom:1rem}
+.expand-btn{
+  padding:.28rem .75rem;border-radius:100px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  color:var(--muted);font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:600;
+  cursor:pointer;transition:color .18s,background .18s,border-color .18s;
+}
+.expand-btn:hover{background:rgba(200,169,110,.08);border-color:rgba(200,169,110,.3);color:var(--accent)}
+
+@media(max-width:480px){
+  .hero{padding:2rem 1.2rem 1.6rem}
+  .page-wrap{padding:0 .9rem 3rem}
+  .weather-grid{grid-template-columns:repeat(2,1fr)}
+  .day-weather-pill{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="orbs">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-sup">Horizons · Programme de séjour</div>
+  <div class="hero-title">Corse du <em>Sud</em></div>
+  <div class="hero-sub">26 août → 5 septembre 2026 · Sainte-Lucie-de-Porto-Vecchio · avec chien 🐾</div>
+  <div class="hero-pills">
+    <span class="hero-pill pill-gold">📅 11 jours</span>
+    <span class="hero-pill pill-green">🥾 7 randos</span>
+    <span class="hero-pill pill-blue">🏖 5+ baignades</span>
+    <span class="hero-pill pill-red">🍽 Restos typiques</span>
+    <span class="hero-pill pill-purple">🐾 Dog-friendly</span>
+    <span class="hero-pill pill-gold">⛺ Étape Corte</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="weather-section">
+    <div class="section-head">☀️ Météo prévue — Sainte-Lucie / Porto-Vecchio</div>
+    <div class="weather-grid">
+      <div class="w-card">
+        <div class="w-day">Mer 26/08</div>
+        <div class="w-ico">☀️</div>
+        <div class="w-temps">31°C <span>/ 24°C</span></div>
+        <div class="w-note">Ensoleillé · vent NE faible · 0 pluie</div>
+      </div>
+      <div class="w-card">
+        <div class="w-day">Jeu 27/08</div>
+        <div class="w-ico">☀️</div>
+        <div class="w-temps">33°C <span>/ 26°C</span></div>
+        <div class="w-note">Largement ensoleillé · vent NE faible</div>
+      </div>
+      <div class="w-card">
+        <div class="w-day">Ven 28/08</div>
+        <div class="w-ico">🔆</div>
+        <div class="w-temps">35°C <span>/ 26°C</span></div>
+        <div class="w-note">Grand soleil · très chaud, sec · vent NE faible</div>
+      </div>
+      <div class="w-card">
+        <div class="w-day">Sam 29/08</div>
+        <div class="w-ico">💨</div>
+        <div class="w-temps">34°C <span>/ 25°C</span></div>
+        <div class="w-note">Ensoleillé</div>
+        <div class="w-alert">⚠️ Vent O/SO forcit — rafales 35-40 km/h</div>
+      </div>
+    </div>
+    <div class="w-banner">
+      <strong>Au-delà du 30/08 :</strong> modèles météo non fiables à 10+ jours. Tendance saisonnière : chaud, sec, ensoleillé — avec risque d'orage isolé en fin de journée sur le relief (Bavella, Ospedale). <strong>→ Recheckez 2-3 jours avant chaque rando en altitude.</strong> Départ tôt (7h–9h) recommandé pour toutes les randos.
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <div class="days-col">
+      <div class="expand-bar">
+        <button class="expand-btn" onclick="toggleAll(true)">Tout déplier ▾</button>
+        <button class="expand-btn" onclick="toggleAll(false)">Tout replier ▴</button>
+      </div>
+
+      <!-- ── JOUR 1 ── -->
+      <div class="day-block">
+        <div class="day-header open" onclick="toggleDay(this)">
+          <div class="day-num">1</div>
+          <div class="day-date-info">
+            <div class="day-date">Mercredi 26 août</div>
+            <div class="day-title">Route vers le Sud — étape à Corte</div>
+          </div>
+          <div class="day-weather-pill">☀️ 31°C · vent faible</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body open">
+          <div class="day-weather-note">
+            <strong>Météo :</strong> ensoleillé, 24°C le matin → 31°C l'après-midi, vent NE faible. Bonnes conditions pour la route et une rando en fin de matinée avant la grosse chaleur.
+          </div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h00</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🚗</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🌅 Départ</div><div class="sd-card-name">Route vers Corte</div></div></div>
+                <div class="sd-card-desc">Montée vers la Haute-Corse, route panoramique à travers le maquis. Prévoir un arrêt café en chemin.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">⏱ 2h–2h30</span><span class="sd-chip green">💰 Gratuit</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">11h30</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🥾</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">☀️ Rando matin</div><div class="sd-card-name">Vallée de la Restonica → Lac de Melo</div></div></div>
+                <div class="sd-card-desc">Boucle via les Bergeries de Grotelle. ~5 km, D+450 m, ombragée, balisée. Baignade dans les vasques de la Restonica en chemin.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">📏 ~5 km · D+450 m</span><span class="sd-chip blue">⏱ 2h30–3h</span><span class="sd-chip green">🐾 Chien OK en laisse</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">14h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍽️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner Corte</div><div class="sd-card-name">Terrasses de la citadelle</div></div></div>
+                <div class="sd-card-desc">Cuisine corse simple en terrasse — charcuterie, brocciu, veau aux olives. Vue sur la citadelle.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~15–25 €/pers</span><span class="sd-chip blue">⏱ 1h30</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">16h30</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏛️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🎯 Après-midi</div><div class="sd-card-name">Citadelle de Corte &amp; vieille ville</div></div></div>
+                <div class="sd-card-desc">Rues pavées, panorama sur les gorges depuis la citadelle. Office de tourisme : renseignements accès Restonica en navette si nécessaire.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">⏱ 1h30</span><span class="sd-chip green">💰 Gratuit (extérieur)</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">19h00</span><div class="sd-dot" style="background:rgba(255,255,255,.25)"></div></div>
+              <div class="sd-card" style="border-left:2px solid rgba(255,255,255,.1)">
+                <div class="sd-card-head"><div class="sd-card-ico">🌙</div><div class="sd-card-meta"><div class="sd-card-type" style="color:rgba(255,255,255,.35)">🌙 Étape</div><div class="sd-card-name">Nuit à Corte ou reprise de route vers le Sud</div></div></div>
+                <div class="sd-card-desc">Selon la fatigue et l'heure — Sainte-Lucie est encore 2h plus au sud.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💡 Décision selon rythme</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="day-tip">⚠️ <span><strong>Accès Restonica :</strong> route réglementée en été, accès parfois uniquement en navette. Se renseigner à l'Office de Tourisme de Corte dès l'arrivée.</span></div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 2 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">2</div>
+          <div class="day-date-info">
+            <div class="day-date">Jeudi 27 août</div>
+            <div class="day-title">Installation à Sainte-Lucie-de-Porto-Vecchio</div>
+          </div>
+          <div class="day-weather-pill">☀️ 33°C · vent faible</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> 26°C le matin, 33°C l'après-midi, ensoleillé, vent NE faible. Journée calme pour s'installer.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">10h00</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🏠</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">☀️ Arrivée</div><div class="sd-card-name">Installation &amp; exploration du village</div></div></div>
+                <div class="sd-card-desc">Déballage, première balade à pied dans le village, marché local si disponible le jeudi matin. Courses de proximité pour la semaine.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">💰 Gratuit</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">14h30</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏖️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🌊 Plage</div><div class="sd-card-name">Fautea ou Tarco — premier bain de mer</div></div></div>
+                <div class="sd-card-desc">Fautea (10 min au nord) : chiens tolérés, jolie tour génoise en surplomb. Tarco : plus tranquille, eau cristalline.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">🐾 Chiens tolérés</span><span class="sd-chip blue">⏱ Après-midi entier</span><span class="sd-chip gold">📍 10 min de SLP-V</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">19h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍕</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍷 Dîner</div><div class="sd-card-name">Pizzeria / auberge du village</div></div></div>
+                <div class="sd-card-desc">Premier soir décontracté — terrasse, ambiance locale, animaux bienvenus. Cuisine simple sans chichi.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~12–20 €/pers</span><span class="sd-chip green">🐾 Terrasse OK</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 3 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">3</div>
+          <div class="day-date-info">
+            <div class="day-date">Vendredi 28 août</div>
+            <div class="day-title">Piscines naturelles du Cavu 💦</div>
+          </div>
+          <div class="day-weather-pill">🔆 35°C · grosse chaleur</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> 35°C l'après-midi — <strong class="w-warn">grosse chaleur</strong>, journée idéale pour un spot d'eau. Partir avant 9h30.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">8h30</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🌅</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🌅 Départ tôt</div><div class="sd-card-name">Route D168A → direction Conca / Cavu</div></div></div>
+                <div class="sd-card-desc">10 min de Sainte-Lucie. Parking payant (~5€) près du restaurant Les 3 Piscines. Partir tôt pour trouver une place et profiter de la fraîcheur du matin.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">📍 10 min de SLP-V</span><span class="sd-chip gold">🅿️ ~5€</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h00</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏊</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">💧 Baignade &amp; rando</div><div class="sd-card-name">Les 3 Piscines — Rivière du Cavu</div></div></div>
+                <div class="sd-card-desc">Le spot phare du séjour. Vasques turquoise creusées dans le granit, eau fraîche même en plein été. ~2–3 km quasi plat le long de la rivière. Exploration vasque par vasque.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">📏 ~2–3 km · plat</span><span class="sd-chip blue">⏱ Journée entière</span><span class="sd-chip green">🐾 Chien à l'aise</span><span class="sd-chip orange">👟 Chaussures accroche obligatoires</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h00</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍽️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner sur place</div><div class="sd-card-name">Restaurant Les 3 Piscines</div></div></div>
+                <div class="sd-card-desc">Simple et pratique, directement sur place. Cuisine locale, burgers, salades. L'idéal pour rester toute la journée sans remonter au village.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~12–22 €/pers</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">14h30</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">💦</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🌊 Après-midi</div><div class="sd-card-name">Retour aux vasques — farniente &amp; fraîcheur</div></div></div>
+                <div class="sd-card-desc">La fraîcheur naturelle du Cavu rend cette après-midi à 35°C parfaitement agréable. Explorer les vasques plus en amont si l'envie est là.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">⏱ Jusqu'à 17h</span><span class="sd-chip green">💰 Gratuit</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="day-tip">⚠️ <span><strong>Sécurité :</strong> rochers glissants — chaussures à semelle accroche indispensables pour tout le monde. Partir tôt pour éviter l'afflux de milieu de journée.</span></div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 4 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">4</div>
+          <div class="day-date-info">
+            <div class="day-date">Samedi 29 août</div>
+            <div class="day-title">Journée plage — criques abritées du vent</div>
+          </div>
+          <div class="day-weather-pill">💨 34°C · rafales après-midi</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> ensoleillé mais <strong class="w-warn">vent O/SO qui forcit nettement l'après-midi (rafales 35–40 km/h)</strong>. Pas de rando en hauteur — un jour de plage abritée tombe parfaitement.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h00</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🌊</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🏖 Plage matin</div><div class="sd-card-name">Folacca · Porto-Novo · Carataggio</div></div></div>
+                <div class="sd-card-desc">Criques dog-friendly sans restriction horaire. Privilégier Folacca ou Porto-Novo, naturellement abrité du vent d'Ouest par la pointe. Chien en laisse.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">🐾 Dog-friendly toute la journée</span><span class="sd-chip blue">⏱ Matinée entière</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🥪</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Pause</div><div class="sd-card-name">Pique-nique sur la plage ou snack</div></div></div>
+                <div class="sd-card-desc">Rester sur la plage ou repasser au village pour un casse-croûte rapide.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">💰 ~0–12 €</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">17h00</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🌅</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🌅 En soirée (optionnel)</div><div class="sd-card-name">Palombaggia ou Santa Giulia — après 18h30</div></div></div>
+                <div class="sd-card-desc">Ces plages iconiques sont interdites aux chiens de 10h à 18h30 en été. Mais le coucher de soleil après 18h30 y est exceptionnel — une balade à ne pas rater.</div>
+                <div class="sd-card-footer"><span class="sd-chip orange">🐾 Chiens interdits 10h–18h30</span><span class="sd-chip blue">🌅 OK avant 10h ou après 18h30</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">20h00</span><div class="sd-dot" style="background:#9b7fd4;box-shadow:0 0 6px #9b7fd455"></div></div>
+              <div class="sd-card" style="border-left:2px solid #9b7fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🍷</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#9b7fd4">🍷 Dîner Porto-Vecchio</div><div class="sd-card-name">Alta Rocca — 6 rue Aspirant Michelin</div></div></div>
+                <div class="sd-card-desc">Vieille ville de Porto-Vecchio. Cuisine corse traditionnelle, ambiance chaleureuse, animaux acceptés, sans réservation. La recommandation de la semaine.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~20–35 €/pers</span><span class="sd-chip green">🐾 Animaux acceptés</span><span class="sd-chip purple">📍 Vieille ville PV</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 5 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">5</div>
+          <div class="day-date-info">
+            <div class="day-date">Dimanche 30 août</div>
+            <div class="day-title">Lac de l'Ospedale — Tour du barrage</div>
+          </div>
+          <div class="day-weather-pill">⚠️ À revérifier</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> au-delà du créneau fiable — <strong class="w-warn">à revérifier 2-3 jours avant</strong>. Si le vent de la veille est retombé, bonne fenêtre pour cette rando forestière.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">8h00</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🚗</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🌅 Départ tôt</div><div class="sd-card-name">Route vers le barrage de l'Ospedale</div></div></div>
+                <div class="sd-card-desc">30 min de route depuis Sainte-Lucie. Parking qui se remplit vite en août — avant 8h30 si possible. Vue sur la baie de Porto-Vecchio déjà depuis la route.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">📍 30 min de SLP-V</span><span class="sd-chip gold">💡 Avant 8h30</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">8h45</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🥾</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">☀️ Rando principale</div><div class="sd-card-name">Tour de l'Ospedale — forêt de pins laricio</div></div></div>
+                <div class="sd-card-desc">~12 km, D+350 m. Boucle forestière ombragée. Points d'eau : lac + ruisseaux sur le parcours. Vue magnifique sur la baie depuis le col de Mela.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">📏 ~12 km · D+350 m</span><span class="sd-chip blue">⏱ 3h30–4h</span><span class="sd-chip green">💧 Eau sur le parcours</span><span class="sd-chip green">🐾 Chien OK</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍽️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner</div><div class="sd-card-name">Auberges du village de l'Ospedale</div></div></div>
+                <div class="sd-card-desc">En fin de rando, petites auberges du village — cuisine simple et copieuse, charcuterie, fromage corse. Meilleur rapport Q/P qu'en bord de mer.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~15–25 €/pers</span><span class="sd-chip purple">💡 Typique &amp; pas cher</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 6 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">6</div>
+          <div class="day-date-info">
+            <div class="day-date">Lundi 31 août</div>
+            <div class="day-title">Aiguilles de Bavella 🏔️</div>
+          </div>
+          <div class="day-weather-pill">⚠️ Revérifier montagne</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> <strong class="w-warn">à revérifier 2-3 jours avant</strong> — secteur montagne, risque d'orage d'après-midi élevé. Annuler ou décaler si doute.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">7h00</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">🚗</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🌅 Très tôt</div><div class="sd-card-name">Route via Zonza → Col de Bavella</div></div></div>
+                <div class="sd-card-desc">~1h de route. Partir avant 7h30 : parking du col qui sature, fraîcheur du matin, et sécurité vis-à-vis des orages d'après-midi.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">📍 ~1h via Zonza</span><span class="sd-chip orange">💡 Avant 7h30 impératif</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">8h00</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🏔️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">☀️ Rando</div><div class="sd-card-name">Massif Sud de Bavella — Trou de la Bombe</div></div></div>
+                <div class="sd-card-desc">Secteur Punta Velacu / Campanile de Sainte-Lucie / Trou de la Bombe. Boucle &lt;500 m de D+, vues spectaculaires sur les aiguilles et les canyons. Superbe malgré la faible difficulté.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">📏 Boucle · D+&lt;500 m</span><span class="sd-chip blue">⏱ 3h–4h</span><span class="sd-chip orange">☀️ Peu d'ombre — eau +++</span><span class="sd-chip green">🐾 Chien OK</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h00</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🥩</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner</div><div class="sd-card-name">Auberges col de Bavella ou Zonza</div></div></div>
+                <div class="sd-card-desc">Cuisine montagnarde : charcuterie, sanglier, fromage de brebis. Auberges au col ou en redescendant à Zonza pour plus de choix. Ambiance authentique.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~15–28 €/pers</span><span class="sd-chip purple">💡 Zonza = plus de choix</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="day-tip">⚠️ <span><strong>Eau cruciale :</strong> secteur minéral, peu d'ombre. Minimum 2L/pers + eau pour le chien. Coussinets à surveiller sur granit chaud.</span></div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 7 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">7</div>
+          <div class="day-date-info">
+            <div class="day-date">Mardi 1er septembre</div>
+            <div class="day-title">Cascade de Piscia di Gallu</div>
+          </div>
+          <div class="day-weather-pill">🌿 Alta Rocca</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Météo :</strong> secteur forestier ombragé, agréable même en pleine journée. Vérifier tout de même les prévisions pour le relief.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h30</span><div class="sd-dot" style="background:#6db88a;box-shadow:0 0 6px #6db88a55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6db88a44">
+                <div class="sd-card-head"><div class="sd-card-ico">💦</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6db88a">🌿 Rando</div><div class="sd-card-name">Piscia di Gallu — cascade de 70 m</div></div></div>
+                <div class="sd-card-desc">L'une des 7 merveilles de l'Alta Rocca. ~2 km aller-retour (extensible en boucle). Secteur forestier ombragé, agréable même en plein été. Parking payant à l'entrée.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">📏 ~2 km A/R (extensible)</span><span class="sd-chip blue">⏱ 1h30–2h</span><span class="sd-chip green">🌿 Ombragé</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">11h30</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏊</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">💧 Baignade</div><div class="sd-card-name">Vasque au pied de la cascade</div></div></div>
+                <div class="sd-card-desc">Eau très fraîche — un bonheur même en septembre. Le chien adore : eau calme et peu profonde sur les bords. Serviettes et vêtements de rechange à prévoir.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">❄️ Eau très fraîche</span><span class="sd-chip green">🐾 Chien OK</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍽️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner</div><div class="sd-card-name">Levie ou Ste-Lucie-de-Tallano</div></div></div>
+                <div class="sd-card-desc">Redescendre vers un petit village de l'Alta Rocca — auberge familiale, prix doux, cuisine du terroir. La quintessence du "typique pas cher".</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~14–22 €/pers</span><span class="sd-chip purple">💡 Auberge &gt; resto côtier</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="day-tip">🅿️ <span><strong>Parking payant</strong> à l'entrée du sentier (~5€). Arriver en semaine avant 10h pour éviter la file.</span></div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 8 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">8</div>
+          <div class="day-date-info">
+            <div class="day-date">Mercredi 2 septembre</div>
+            <div class="day-title">Journée Porto-Vecchio</div>
+          </div>
+          <div class="day-weather-pill">🏙️ Ville &amp; plage</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h30</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🛒</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">☀️ Matin</div><div class="sd-card-name">Marché + vieille ville &amp; citadelle</div></div></div>
+                <div class="sd-card-desc">Marché du matin (produits locaux, charcuterie, fromages). Balade dans la vieille ville et montée à la citadelle génoise — vue superbe sur le golfe de Porto-Vecchio.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">⏱ 2h–3h</span><span class="sd-chip green">💰 Gratuit (balade)</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">13h00</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🐗</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍽 Déjeuner</div><div class="sd-card-name">A Casa Corsa — Quai Pascal Paoli, port de plaisance</div></div></div>
+                <div class="sd-card-desc">Planches charcuterie/fromage, cannelloni au brocciu, sanglier, fiadone. Bon rapport Q/P. Alternative : Le Guest pour un burger copieux.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~18–28 €/pers</span><span class="sd-chip blue">📍 Port de plaisance</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">15h00</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏖️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🌊 Après-midi</div><div class="sd-card-name">Plage Folacca ou Porto-Novo</div></div></div>
+                <div class="sd-card-desc">Crique dog-friendly pour l'après-midi. Option : repasser par Palombaggia au coucher du soleil (chiens OK après 18h30).</div>
+                <div class="sd-card-footer"><span class="sd-chip green">🐾 Chiens OK</span><span class="sd-chip blue">⏱ Après-midi libre</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 9 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">9</div>
+          <div class="day-date-info">
+            <div class="day-date">Jeudi 3 septembre</div>
+            <div class="day-title">Sentier du littoral — Tour génoise de Fautea</div>
+          </div>
+          <div class="day-weather-pill">🏝️ Côte &amp; littoral</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">9h00</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🥾</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">☀️ Rando littorale</div><div class="sd-card-name">Sentier Fautea — Tour génoise &amp; retour intérieur</div></div></div>
+                <div class="sd-card-desc">Boucle courte : sentier littoral à l'aller, retour par l'intérieur des terres. ~4-5 km, plat, ombre variable. Vue magnifique sur la côte et la tour génoise.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">📏 ~4–5 km · plat</span><span class="sd-chip blue">⏱ 1h30–2h</span><span class="sd-chip green">🐾 Chien OK</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">11h30</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🌊</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">🏖 Baignade</div><div class="sd-card-name">Plage de Fautea — juste en contrebas</div></div></div>
+                <div class="sd-card-desc">Peu fréquentée, chiens tolérés. Vue sur la tour génoise depuis l'eau. Parfait pour une dernière grande journée nature du séjour.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">🐾 Chiens tolérés</span><span class="sd-chip blue">⏱ Jusqu'à 17h</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">19h30</span><div class="sd-dot" style="background:#d4756b;box-shadow:0 0 6px #d4756b55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #d4756b44">
+                <div class="sd-card-head"><div class="sd-card-ico">🍕</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#d4756b">🍷 Dîner</div><div class="sd-card-name">Auberge ou pizzeria locale</div></div></div>
+                <div class="sd-card-desc">Valeur sûre du coin — terrasse, chien bienvenu, cuisine locale sans chichi. Ambiance décontractée pour une fin de séjour parfaite.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💰 ~12–20 €/pers</span><span class="sd-chip green">🐾 Terrasse animaux OK</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 10 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">10</div>
+          <div class="day-date-info">
+            <div class="day-date">Vendredi 4 septembre</div>
+            <div class="day-title">Journée libre — Rattrapage ou Bonifacio</div>
+          </div>
+          <div class="day-weather-pill">🎲 Journée volant</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="day-weather-note"><strong>Journée volant :</strong> rattraper une rando ratée, refaire un spot coup de cœur, ou pousser jusqu'à Bonifacio.</div>
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">Option A</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🔄</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">🔄 Rattrapage</div><div class="sd-card-name">Rando ou plage non faite dans la semaine</div></div></div>
+                <div class="sd-card-desc">Revisiter le Cavu, l'Ospedale ou Bavella si la météo avait contrarié les plans. Ou refaire les 3 Piscines si c'était le coup de cœur.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">💡 Voir météo du jour</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">Option B</span><div class="sd-dot" style="background:#9b7fd4;box-shadow:0 0 6px #9b7fd455"></div></div>
+              <div class="sd-card" style="border-left:2px solid #9b7fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🏰</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#9b7fd4">🏙 Excursion</div><div class="sd-card-name">Bonifacio — falaises, citadelle, port</div></div></div>
+                <div class="sd-card-desc">35 min vers le sud. Falaises calcaires spectaculaires, citadelle médiévale, port animé. Chien non admis partout dans la citadelle — prévoir laisse et patience.</div>
+                <div class="sd-card-footer"><span class="sd-chip blue">📍 35 min de SLP-V</span><span class="sd-chip orange">🐾 Partiel — citadelle limitée</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="day-tip">💡 <span><strong>Dernier repas typique :</strong> revenir sur une adresse testée et aimée dans la semaine, ou tenter la dernière auberge pas encore visitée à Sainte-Lucie.</span></div>
+        </div>
+      </div>
+
+      <!-- ── JOUR 11 ── -->
+      <div class="day-block">
+        <div class="day-header closed" onclick="toggleDay(this)">
+          <div class="day-num">11</div>
+          <div class="day-date-info">
+            <div class="day-date">Samedi 5 septembre</div>
+            <div class="day-title">Départ — dernier bain &amp; souvenirs corses</div>
+          </div>
+          <div class="day-weather-pill">🏠 Retour</div>
+          <div class="day-chevron">▶</div>
+        </div>
+        <div class="day-body">
+          <div class="sd-timeline">
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">Matin</span><div class="sd-dot" style="background:#6b9fd4;box-shadow:0 0 6px #6b9fd455"></div><div class="sd-connector"></div></div>
+              <div class="sd-card" style="border-left:2px solid #6b9fd444">
+                <div class="sd-card-head"><div class="sd-card-ico">🌊</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#6b9fd4">💧 Dernier bain</div><div class="sd-card-name">Fautea ou les 3 Piscines du Cavu</div></div></div>
+                <div class="sd-card-desc">Selon l'heure de départ — Fautea si on part tôt (plus proche), Cavu si la matinée est longue. Dernières photos.</div>
+                <div class="sd-card-footer"><span class="sd-chip green">🐾 Chien OK</span><span class="sd-chip gold">💡 Ultime souvenir</span></div>
+              </div>
+            </div>
+            <div class="sd-slot">
+              <div class="sd-time-col"><span class="sd-time">Avant route</span><div class="sd-dot" style="background:#c8a96e;box-shadow:0 0 6px #c8a96e55"></div></div>
+              <div class="sd-card" style="border-left:2px solid #c8a96e44">
+                <div class="sd-card-head"><div class="sd-card-ico">🛍️</div><div class="sd-card-meta"><div class="sd-card-type" style="color:#c8a96e">🛒 Courses</div><div class="sd-card-name">Produits corses à ramener</div></div></div>
+                <div class="sd-card-desc">Charcuterie (lonzu, coppa, figatellu), fromages (brocciu, tomme), canistrelli, miel de maquis, chestnut cream. Marché ou épicerie locale avant la route.</div>
+                <div class="sd-card-footer"><span class="sd-chip gold">🧀 Charcuterie · Fromage · Canistrelli · Miel</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /days-col -->
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="sidebar">
+
+      <div class="sbox">
+        <div class="sbox-head">📊 Le séjour en chiffres</div>
+        <div class="sbox-body">
+          <div class="stat-row"><span class="stat-label">Durée</span><span class="stat-val">11 jours</span></div>
+          <div class="stat-row"><span class="stat-label">Randos boucle</span><span class="stat-val">7</span></div>
+          <div class="stat-row"><span class="stat-label">Spots baignade</span><span class="stat-val">5+</span></div>
+          <div class="stat-row"><span class="stat-label">D+ total estimé</span><span class="stat-val">~1 800 m</span></div>
+          <div class="stat-row"><span class="stat-label">Km rando</span><span class="stat-val">~35 km</span></div>
+          <div class="stat-row"><span class="stat-label">Restos typiques</span><span class="stat-val">~8 repas</span></div>
+        </div>
+      </div>
+
+      <div class="sbox">
+        <div class="sbox-head">💡 Bon à savoir</div>
+        <div class="sbox-body">
+          <div class="tip-row">
+            <span class="tip-ico">🌡️</span>
+            <div class="tip-text">
+              <strong>Chaleur &amp; chien</strong>
+              Partir avant 9h sur les randos exposées. Coussinets et hydratation à surveiller sur le granit chaud. Gamelle pliable indispensable.
+            </div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">⛈️</span>
+            <div class="tip-text">
+              <strong>Orages en altitude</strong>
+              Au-delà du 30/08 : rechecker systématiquement 2-3 jours avant Bavella, Ospedale, Corte.
+            </div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">🅿️</span>
+            <div class="tip-text">
+              <strong>Parkings payants</strong>
+              Cavu (~5€), Piscia di Gallu (~5€), Ospedale. Prévoir monnaie.
+            </div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">🏠</span>
+            <div class="tip-text">
+              <strong>Auberges de village</strong>
+              Zonza, Levie, Ste-Lucie-de-Tallano, l'Ospedale = meilleures adresses typiques et pas chères.
+            </div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">🌬️</span>
+            <div class="tip-text">
+              <strong>Libeccio</strong>
+              Vent du SO pouvant souffler fort en début septembre. Privilégier plages abritées côté Est quand il est annoncé.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sbox">
+        <div class="sbox-head">🐾 Chiens &amp; plages</div>
+        <div class="sbox-body">
+          <div class="rule-item"><div class="rule-dot green"></div><div>Fautea, Tarco, Folacca, Porto-Novo, Carataggio — <strong style="color:var(--green)">autorisés en laisse</strong></div></div>
+          <div class="rule-item"><div class="rule-dot orange"></div><div>Palombaggia &amp; Santa Giulia — <strong style="color:var(--orange)">interdits 10h–18h30</strong> (15/06 au 30/09)</div></div>
+          <div class="rule-item"><div class="rule-dot green"></div><div>3 Piscines du Cavu — <strong style="color:var(--green)">chien OK</strong> dans les vasques</div></div>
+          <div class="rule-item"><div class="rule-dot red"></div><div>Citadelle Bonifacio — <strong style="color:var(--red)">partiel seulement</strong></div></div>
+        </div>
+      </div>
+
+      <div class="sbox">
+        <div class="sbox-head">🍽 Adresses notées</div>
+        <div class="sbox-body">
+          <div class="tip-row">
+            <span class="tip-ico">🏛️</span>
+            <div class="tip-text"><strong>Alta Rocca — Porto-Vecchio</strong>6 rue Aspirant Michelin · Trad. corse · ~20–35€ · Animaux OK · Sans résa</div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">⚓</span>
+            <div class="tip-text"><strong>A Casa Corsa — Porto-Vecchio</strong>Quai Pascal Paoli · Brocciu, sanglier, fiadone</div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">💦</span>
+            <div class="tip-text"><strong>Les 3 Piscines — Cavu</strong>Sur place · Simple &amp; pratique · Journée complète</div>
+          </div>
+          <div class="tip-row">
+            <span class="tip-ico">🏔️</span>
+            <div class="tip-text"><strong>Auberges Zonza / Ospedale / Levie</strong>Montagnard corse · Charcuterie · ~15–25€</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <div>Horizons · Programme Corse du Sud · 26/08 → 05/09/2026 · Données indicatives — météo à revérifier</div>
+  <div class="footer-brand">Horizons</div>
+</div>
+
+<script>
+function toggleDay(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  header.classList.toggle('closed', isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+function toggleAll(open) {
+  document.querySelectorAll('.day-header').forEach(h => {
+    h.classList.toggle('open', open);
+    h.classList.toggle('closed', !open);
+    h.nextElementSibling.classList.toggle('open', open);
+  });
+}
+</script>
+</body>
+</html>
